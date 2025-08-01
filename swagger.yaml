@@ -1,0 +1,115 @@
+openapi: 3.0.3
+info:
+  title: Kenti IoT Food Delivery API
+  description: API RESTful para integração com o dispositivo IoT Kenti, que monitora a temperatura e localização de bolsas de entrega.
+  version: 1.0.0
+servers:
+  - url: http://52.205.25.205
+paths:
+  /bag/{id}:
+    get:
+      summary: Obter dados da bolsa de entrega
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Dados da bolsa retornados com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  gps:
+                    type: string
+                    example: "-23.62699, -46.7428975"
+                  temperature:
+                    type: number
+                    example: 60.0
+                  id:
+                    type: integer
+                    example: 1
+    post:
+      summary: Atualizar localização e temperatura da bolsa
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gps:
+                  type: string
+                  example: "-23.62699, -46.7428975"
+                temperature:
+                  type: number
+                  example: 60.0
+      responses:
+        '200':
+          description: Bolsa atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bag'
+  /bag/{id}/status:
+    get:
+      summary: Obter status da bolsa (ligada/desligada)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Status retornado com sucesso
+          content:
+            text/plain:
+              schema:
+                type: integer
+                example: 0
+    post:
+      summary: Atualizar status da bolsa (ligada ou desligada)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: status
+          in: query
+          required: true
+          schema:
+            type: integer
+            enum: [0, 1]
+      responses:
+        '200':
+          description: Status atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bag'
+
+components:
+  schemas:
+    Bag:
+      type: object
+      properties:
+        gps:
+          type: string
+          example: "-23.62699, -46.7428975"
+        temperature:
+          type: number
+          example: 60.0
+        id:
+          type: integer
+          example: 1
