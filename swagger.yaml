@@ -113,3 +113,11 @@ components:
         id:
           type: integer
           example: 1
+
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
